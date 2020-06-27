@@ -1,0 +1,36 @@
+<script>
+let activeEffect
+
+class Dep{
+    constructor(value){
+        this.subscribers = new Set()
+        this.value = value
+    } 
+    depend(){
+        if (activeEffect) {
+            this.subscribers.add(activeEffect)
+        }
+    }
+
+    notify(){
+        this.subscribers.forEach(sub => {
+            console.log(dep.value)
+        })
+    }
+}
+
+function watchEffect(effect){
+    activeEffect = effect
+    effect()
+    activeEffect = null
+}
+
+const dep = new Dep('Hello')
+watchEffect(()=>{
+    dep.depend()
+    console.log(dep.value)
+})
+
+dep.value = 'changed'
+dep.notify()
+</script>
