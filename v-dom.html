@@ -1,0 +1,45 @@
+<div id="app"></div>
+<style>
+    .red{
+        background-color: red;
+    }
+</style>
+<script>
+    function h(tag, props, children){
+        return {
+            tag,
+            props,
+            children
+        }
+    }
+
+    function mount(vnode, container){
+        const el = document.createElement(vnode.tag)
+        vnode.props ?  Object.keys(vnode.props).forEach(key => { 
+            el.classList.add(vnode.props[key])
+
+        }) : '';
+        
+        vnode.children.forEach(element => {
+            childEl = document.createElement(element.tag)
+            element.props ? Object.keys(children.props).forEach(key => { 
+                el.classList.add(children.props[key])
+
+            }): '';
+            element.children.forEach(child =>{
+                typeof child === 'string' ?
+                    childEl.innerText = childEl.innerText + " " +child 
+                    : ''
+            })
+            el.appendChild(childEl)
+        });
+
+        container.appendChild(el)
+    }
+
+    const vdom = h('div', {class : 'red'},[
+        h('span', null, ['hello','world'])
+    ])
+
+    mount(vdom, document.getElementById('app'))
+</script>
