@@ -4,8 +4,16 @@ let activeEffect
 class Dep{
     constructor(value){
         this.subscribers = new Set()
-        this.value = value
+        this._value = value
     } 
+    get value(){
+        this.depend()
+        return this._value
+    }
+    set value(newValue){
+        this._value = newValue
+        this.notify()
+    }
     depend(){
         if (activeEffect) {
             this.subscribers.add(activeEffect)
@@ -26,11 +34,9 @@ function watchEffect(effect){
 }
 
 const dep = new Dep('Hello')
-watchEffect(()=>{
-    dep.depend()
+watchEffect(()=>{ 
     console.log(dep.value)
 })
 
-dep.value = 'changed'
-dep.notify()
+dep.value = 'changed' 
 </script>
