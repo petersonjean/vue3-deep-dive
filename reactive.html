@@ -20,22 +20,23 @@
         effect()
         activeEffect = null
     }
+    const depsMap = new WeakMap()
+
+    const reactiveHandlers= {
+        get(target, key){
+            let depsForTarget = depsMap.get(target) 
+            if (!depsForTarget) {
+                depsForTarget = new Map()
+                depsMap.set(target, deps)
+            }
+        },
+        set(target,key, value){
+
+        }
+    }
+
     function reactive(raw){
-        Object.keys(raw).forEach(key =>{
-            const dep = new Dep()
-            let value = raw[key]
-            Object.defineProperty(raw, key, {
-                get(){
-                    dep.depend()
-                    return value
-                },
-                set(newValue){
-                    value = newValue
-                    dep.notify()
-                }
-            })
-        })
-        return raw
+       return new Proxy(raw, reactiveHandlers)
     }
 
 
